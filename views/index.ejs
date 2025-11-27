@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>EvoMems - Loading</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00c8ff",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#0f1f23",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* CSS-based Loader Animation */
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.33);
+                opacity: 0.8;
+            }
+
+            80%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse-dot {
+            0% {
+                transform: scale(0.8);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0.8);
+            }
+        }
+
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        .pulse-dot {
+            animation: pulse-dot 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+        }
+
+        /* Gradient Background to match user request */
+        .radial-gradient-bg {
+            background: radial-gradient(circle at center, #0F1724 0%, #1E2A3B 100%);
+        }
+    </style>
+    <style>
+        body {
+           height: 100dvh;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <div
+        class="relative flex h-screen w-full flex-col items-center justify-center radial-gradient-bg font-display text-[#E5E7EB] group/design-root overflow-hidden">
+        <!-- Main Content Area -->
+        <div class="flex flex-col items-center justify-center flex-grow text-center px-4">
+            <!-- Animated Loader -->
+            <div class="relative mb-8 flex h-48 w-48 items-center justify-center">
+                <!-- Outer pulsing rings -->
+                <div class="pulse-ring absolute h-full w-full rounded-full bg-primary/50"></div>
+                <div class="pulse-ring absolute h-full w-full rounded-full bg-primary/30"
+                    style="animation-delay: 0.5s;"></div>
+                <!-- Central pulsing dot -->
+                <div
+                    class="pulse-dot relative h-8 w-8 rounded-full bg-primary shadow-[0_0_15px_rgba(0,200,255,0.7),0_0_25px_rgba(0,200,255,0.5)]">
+                </div>
+            </div>
+            <!-- Text Label with glow effect -->
+            <div class="flex flex-col gap-3 w-full max-w-sm">
+                <p class="text-xl font-medium leading-normal" style="text-shadow: 0 0 10px rgba(0, 200, 255, 0.4);">
+                    Checking Wallet...</p>
+                <!-- Progress Bar from components list, adapted for the theme -->
+               
+            </div>
+        </div>
+        <!-- App Logo (Optional) -->
+        <footer class="w-full py-8 px-4 flex justify-center">
+            <div class="flex items-center gap-2 opacity-50">
+                <span class="material-symbols-outlined text-xl" data-icon="auto_awesome">auto_awesome</span>
+                <p class="font-display font-bold text-base">EvoMems</p>
+            </div>
+        </footer>
+    </div>
+</body>
+<script>
+
+
+
+    fetch('/api/check-wallet?userId=<%= userId %>')
+        .then(response => response.json())
+        .then(data => {
+            if (data.hasWallet) {
+                window.location.href = '/dashboard';
+            } else {
+                window.location.href = '/connect-wallet';
+            }
+        })
+        .catch(error => {
+            console.error('Error checking wallet:', error);
+            // Optionally handle the error, e.g., show a message to the user
+        });
+</script>
+</html>

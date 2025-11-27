@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Connect Wallet - EvoMems</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#00c8ff",
+              "background-light": "#f5f8f8",
+              "background-dark": "#0f1f23",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+
+
+ <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tonConnectBtn = document.querySelector("button"); // the TON Connect button
+    const tonConnect = new TonConnect.TonConnect({
+      manifestUrl: "https://yourdomain.com/tonconnect-manifest.json"
+    });
+
+    tonConnectBtn.addEventListener("click", async () => {
+      try {
+        const walletInfo = await tonConnect.connect();
+        console.log("Wallet connected:", walletInfo);
+
+        // Send wallet info to backend
+        const response = await fetch("/api/auth/wallet-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ address: walletInfo.account })
+        });
+        const data = await response.json();
+        console.log("Backend session response:", data);
+
+        alert("Wallet connected successfully!");
+        // Redirect to dashboard or marketplace
+        window.location.href = "/dashboard";
+      } catch (err) {
+        console.error("Wallet connection failed:", err);
+        alert("Wallet connection failed. Please try again.");
+      }
+    });
+  });
+</script>
+
+
+<body class="font-display">
+<div class="relative flex h-screen min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-y-auto">
+<!-- TopAppBar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<!-- Placeholder for potential back button -->
+</div>
+<h2 class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-zinc-900 dark:text-white">Connect Wallet</h2>
+<div class="flex w-12 items-center justify-end">
+
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-between p-4">
+<div class="flex flex-1 flex-col items-center justify-center text-center">
+<!-- Hero Icon/Graphic -->
+<div class="mb-8 flex h-32 w-32 items-center justify-center rounded-full bg-primary/20">
+<svg class="h-16 w-16 text-primary" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.9998 1.84473L2.24512 7.22173L11.9998 12.5987L21.7545 7.22173L11.9998 1.84473Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+<path d="M2.24512 16.7782L11.9998 22.1552L21.7545 16.7782" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+<path d="M2.24512 7.22173L11.9998 12.5987L21.7545 7.22173" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+<path d="M12 22.1552V12.5986" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- HeadlineText -->
+<h2 class="text-zinc-900 dark:text-white tracking-light text-[28px] font-bold leading-tight pb-3">Connect Your Wallet</h2>
+<!-- BodyText -->
+<p class="max-w-xs text-zinc-600 dark:text-gray-300 text-base font-normal leading-normal pb-3">Connect your TON wallet to start using EvoMems.</p>
+</div>
+<div class="w-full">
+<!-- SingleButton -->
+<div class="flex py-3">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 flex-1 bg-primary text-background-dark gap-2.5 text-base font-bold leading-normal tracking-[0.015em]">
+<svg class="h-6 w-6" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M10.2202 8.71002L15.3402 11.45C15.8402 11.72 15.8402 12.28 15.3402 12.55L10.2202 15.29C9.72021 15.56 9.11021 15.21 9.22021 14.64L9.82021 11.7C9.87021 11.45 10.0302 11.24 10.2602 11.16L12.5702 10.42" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="truncate">TON Connect</span>
+</button>
+</div>
+<!-- Helper/Security Text -->
+<p class="text-center text-sm text-zinc-500 dark:text-gray-400 font-normal py-2">Securely powered by TON Connect.</p>
+</div>
+</div>
+</div>
+</body></html>
